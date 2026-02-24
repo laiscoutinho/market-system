@@ -187,7 +187,7 @@ http://localhost:3000
 A documentação pode ser acessada via:
 
 ```
-http://localhost:3000/api-docs
+http://localhost:3000/docs
 ```
 
 Implementada com **Swagger**.
