@@ -17,7 +17,7 @@ A aplicação foi construída seguindo arquitetura em camadas, com autenticaçã
 * Node.js
 * Express
 * JavaScript
-* MongoDB **ou** MySQL
+* MySQL
 * JWT (JSON Web Token)
 * Swagger (documentação)
 * Postman (collection de testes)
@@ -30,12 +30,12 @@ O projeto segue o padrão de **arquitetura em camadas**, promovendo organizaçã
 
 ```
 src/
- ├── routes/
+ ├── config/ 
  ├── controllers/
- ├── services/
+ ├── middlewares/ 
  ├── models/
- ├── middlewares/
- └── config/
+ ├── routes/
+ └── services/
 ```
 
 ### 🔎 Responsabilidades
@@ -46,22 +46,6 @@ src/
 * **models/** → Modelagem das entidades no banco
 * **middlewares/** → Autenticação, autorização e validações
 * **config/** → Configurações gerais (banco, JWT etc.)
-
----
-
-## 🔐 Autenticação e Autorização
-
-* Autenticação via **JWT**
-* Controle de acesso baseado em **roles**
-
-  * `ADMIN`
-  * `USER` (ou `VENDEDOR`)
-
-Apenas usuários autorizados podem:
-
-* Cadastrar produtos
-* Alterar estoque
-* Visualizar relatórios
 
 ---
 
@@ -95,6 +79,22 @@ Apenas usuários autorizados podem:
 
 ---
 
+## 🔐 Autenticação e Autorização
+
+* Autenticação via **JWT**
+* Controle de acesso baseado em **roles**
+
+  * `ADMIN`
+  * `VENDEDOR`
+
+Apenas usuários autorizados podem:
+
+* Cadastrar produtos
+* Alterar estoque
+* Visualizar relatórios
+
+---
+
 ## 📜 Regras de Negócio
 
 * ❌ Não é permitido vender produtos sem estoque disponível
@@ -124,8 +124,8 @@ Criar um arquivo `.env`:
 
 ```
 PORT=3000
-DATABASE_URL=sua_url_do_banco
-JWT_SECRET=sua_chave_secreta
+DATABASE_URL=url_do_banco
+JWT_SECRET=chave_secreta
 ```
 
 ### 4️⃣ Executar o projeto
@@ -139,46 +139,6 @@ Servidor rodando em:
 ```
 http://localhost:3000
 ```
-
----
-
-## 📌 Rotas da API
-
-### 🔐 Autenticação
-
-| Método | Rota        | Descrição                |
-| ------ | ----------- | ------------------------ |
-| POST   | /auth/login | Login e geração de token |
-
----
-
-### 📦 Produtos
-
-| Método | Rota          | Descrição         |
-| ------ | ------------- | ----------------- |
-| POST   | /products     | Cadastrar produto |
-| GET    | /products     | Listar produtos   |
-| PUT    | /products/:id | Atualizar produto |
-| DELETE | /products/:id | Remover produto   |
-
----
-
-### 🗂 Categorias
-
-| Método | Rota        | Descrição         |
-| ------ | ----------- | ----------------- |
-| POST   | /categories | Criar categoria   |
-| GET    | /categories | Listar categorias |
-
----
-
-### 💰 Vendas
-
-| Método | Rota                                                  | Descrição             |
-| ------ | ----------------------------------------------------- | --------------------- |
-| POST   | /sales                                                | Registrar venda       |
-| GET    | /sales                                                | Listar vendas         |
-| GET    | /sales/report?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD | Relatório por período |
 
 ---
 
@@ -206,22 +166,44 @@ Permite testar todas as rotas com autenticação JWT configurada.
 
 ---
 
-## 🎯 Diferenciais Técnicos
+## 📌 Rotas da API
 
-* Arquitetura organizada e escalável
-* Separação clara entre regra de negócio e controle de requisições
-* Segurança com JWT
-* Controle de permissões por perfil
-* Validação robusta de dados
-* Documentação estruturada
+### 🔐 Autenticação
+
+| Método | Rota        | Descrição                |
+| ------ | ----------- | ------------------------ |
+| POST   | /auth/login | Login e geração de token |
+
+---
+
+### 🗂 Categorias
+
+| Método | Rota        | Descrição         |
+| ------ | ----------- | ----------------- |
+| POST   | /categories | Criar categoria   |
+| GET    | /categories | Listar categorias |
 
 ---
 
-## 📌 Status do Projeto
+### 📦 Produtos
 
-✔ Funcional
-✔ Estruturado
-✔ Documentado
-✔ Pronto para evolução
+| Método | Rota          | Descrição         |
+| ------ | ------------- | ----------------- |
+| POST   | /products     | Cadastrar produto |
+| GET    | /products     | Listar produtos   |
+| PUT    | /products/:id | Atualizar produto |
+| DELETE | /products/:id | Remover produto   |
 
 ---
+
+### 💰 Vendas
+
+| Método | Rota                                                  | Descrição             |
+| ------ | ----------------------------------------------------- | --------------------- |
+| POST   | /sales                                                | Registrar venda       |
+| GET    | /sales                                                | Listar vendas         |
+| GET    | /sales/report?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD | Relatório por período |
+
+---
+
+## 📌 Contribua!
