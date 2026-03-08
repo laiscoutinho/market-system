@@ -1,38 +1,39 @@
 const productService = require('../services/productService');
+const { success, error } = require('../middlewares/response');
 
 const create = async (req, res) => {
     try {
         const product = await productService.create(req.body);
-        res.status(201).json(product);
+        success(res, product, 201);
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        error(res, err.message);
     }
 };
 
 const findAll = async (req, res) => {
     try {
         const products = await productService.findAll();
-        res.json(products);
+        success(res, products);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        error(res, err.message, 500);
     }
 };
 
 const update = async (req, res) => {
     try {
         const product = await productService.update(req.params.id, req.body);
-        res.json(product);
+        success(res, product);
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        error(res, err.message);
     }
 };
 
 const remove = async (req, res) => {
     try {
         const result = await productService.remove(req.params.id);
-        res.json(result);
+        success(res, result);
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        error(res, err.message);
     }
 };
 

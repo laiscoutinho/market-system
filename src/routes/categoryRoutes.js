@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const categoryController = require('../controllers/categoryController');
 const { authenticate, authorize } = require('../middlewares/authMiddleware');
+const { categoryValidator } = require('../middlewares/validators');
+const validate = require('../middlewares/validate');
 
 /**
  * @swagger
@@ -20,8 +22,17 @@ const { authenticate, authorize } = require('../middlewares/authMiddleware');
  *             properties:
  *               name:
  *                 type: string
+ *     responses:
+ *       201:
+ *         description: Categoria criada
+ *       400:
+ *         description: Erro de validação
+ *       401:
+ *         description: Token não fornecido
+ *       403:
+ *         description: Acesso negado
  */
-router.post('/', authenticate, authorize('ADMIN'), categoryController.create);
+router.post('/', authenticate, authorize('ADMIN'), categoryValidator, validate, categoryController.create);
 
 /**
  * @swagger
@@ -31,6 +42,11 @@ router.post('/', authenticate, authorize('ADMIN'), categoryController.create);
  *     tags: [Categories]
  *     security:
  *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de categorias
+ *       401:
+ *         description: Token não fornecido
  */
 router.get('/', authenticate, categoryController.findAll);
 
