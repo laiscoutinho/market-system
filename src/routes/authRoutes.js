@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
+const { registerValidator, loginValidator } = require('../middlewares/validators');
+const validate = require('../middlewares/validate');
 
 /**
  * @swagger
@@ -24,8 +26,13 @@ const authController = require('../controllers/authController');
  *               role:
  *                 type: string
  *                 enum: [ADMIN, VENDEDOR]
+ *     responses:
+ *       201:
+ *         description: Usuário criado
+ *       400:
+ *         description: Erro de validação
  */
-router.post('/register', authController.register);
+router.post('/register', registerValidator, validate, authController.register);
 
 /**
  * @swagger
@@ -44,7 +51,12 @@ router.post('/register', authController.register);
  *                 type: string
  *               password:
  *                 type: string
+ *     responses:
+ *       200:
+ *         description: Token JWT gerado
+ *       401:
+ *         description: Credenciais inválidas
  */
-router.post('/login', authController.login);
+router.post('/login', loginValidator, validate, authController.login);
 
 module.exports = router;
