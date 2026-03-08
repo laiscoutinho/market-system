@@ -49,57 +49,60 @@ src/
 
 ---
 
-## 📦 Funcionalidades
-
-### 🛍 Produtos
-
-* Cadastro de produtos
-* Associação a categorias
-* Atualização e remoção
-
-### 🗂 Categorias
-
-* Cadastro de categorias
-* Listagem
-
-### 📊 Estoque
-
-* Controle automático de estoque
-* Atualização após venda
-
-### 💰 Vendas
-
-* Registro de venda
-* Itens da venda
-* Cálculo automático do total
-
-### 📈 Relatórios
-
-* Relatório de vendas por período (data inicial e final)
-
----
-
-## 🔐 Autenticação e Autorização
+## 📌 Funcionalidades, Rotas da API e Autorização
 
 * Autenticação via **JWT**
 * Controle de acesso baseado em **roles**
+  * `ADMIN` → acesso total
+  * `VENDEDOR` → acesso limitado
+* Todos os dados passam por validação antes de persistência
 
-  * `ADMIN`
-  * `VENDEDOR`
+### 🔐 Autenticação
 
-Apenas usuários autorizados podem:
-
-* Cadastrar produtos
-* Alterar estoque
-* Visualizar relatórios
+| Método | Rota           | Descrição                | Auth            |
+| ------ | -------------- | ------------------------ | --------------- |
+| POST   | /auth/register | Cadastro de usuário      | NAO PRECISA     |
+| POST   | /auth/login    | Login e geração de token | NAO PRECISA     |
 
 ---
 
-## 📜 Regras de Negócio
+### 🗂 Categorias
+* Cadastro de categorias
+* Listagem
 
-* ❌ Não é permitido vender produtos sem estoque disponível
-* 🔄 O estoque é atualizado automaticamente após cada venda
-* ✅ Todos os dados passam por validação antes de persistência
+| Método | Rota           | Descrição                | Auth             |
+| ------ | -------------- | ------------------------ | ---------------- |
+| POST   | /categories    | Criar categoria          | ADMIN            |
+| GET    | /categories    | Listar categorias        | ADMIN, VENDEDOR  |
+
+---
+
+### 📦 Produtos
+* Cadastro de produtos
+* Associação a categorias
+* Atualização e remoção da quantidade
+
+| Método | Rota           | Descrição                | Auth             |
+| ------ | -------------- | ------------------------ | ---------------- |
+| POST   | /products      | Cadastrar produto        | ADMIN            |
+| GET    | /products      | Listar produtos          | ADMIN, VENDEDOR  |
+| PUT    | /products/:id  | Atualizar produto        | ADMIN            |
+| DELETE | /products/:id  | Remover produto          | ADMIN            |
+
+---
+
+### 💰 Vendas e relatório
+* Registro de venda
+* Itens da venda
+* Controle automático de estoque e atualização após venda
+* Não é permitido vender produtos sem estoque disponível
+* Relatório de vendas por período (data inicial e final)
+
+| Método | Rota           | Descrição                | Auth             |
+| ------ | -------------- | ------------------------ | ---------------- |
+| POST   | /sales         | Registrar venda          | ADMIN, VENDEDOR  |
+| GET    | /sales         | Listar vendas            | ADMIN, VENDEDOR    |
+| GET    | /sales/report?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD | Relatório por período | ADMIN |
 
 ---
 
@@ -115,7 +118,7 @@ cd market-system
 ### 2️⃣ Instalar dependências
 
 ```bash
-npm install
+npm install 
 ```
 
 ### 3️⃣ Configurar variáveis de ambiente
@@ -124,8 +127,11 @@ Criar um arquivo `.env`:
 
 ```
 PORT=3000
-DATABASE_URL=url_do_banco
-JWT_SECRET=chave_secreta
+DB_HOST=localhost
+DB_USER=root
+DB_PASS=sua_senha
+DB_NAME=market_system
+JWT_SECRET=sua_chave_secreta
 ```
 
 ### 4️⃣ Executar o projeto
@@ -163,46 +169,6 @@ A collection está disponível no repositório:
 ```
 
 Permite testar todas as rotas com autenticação JWT configurada.
-
----
-
-## 📌 Rotas da API
-
-### 🔐 Autenticação
-
-| Método | Rota        | Descrição                |
-| ------ | ----------- | ------------------------ |
-| POST   | /auth/login | Login e geração de token |
-
----
-
-### 🗂 Categorias
-
-| Método | Rota        | Descrição         |
-| ------ | ----------- | ----------------- |
-| POST   | /categories | Criar categoria   |
-| GET    | /categories | Listar categorias |
-
----
-
-### 📦 Produtos
-
-| Método | Rota          | Descrição         |
-| ------ | ------------- | ----------------- |
-| POST   | /products     | Cadastrar produto |
-| GET    | /products     | Listar produtos   |
-| PUT    | /products/:id | Atualizar produto |
-| DELETE | /products/:id | Remover produto   |
-
----
-
-### 💰 Vendas
-
-| Método | Rota                                                  | Descrição             |
-| ------ | ----------------------------------------------------- | --------------------- |
-| POST   | /sales                                                | Registrar venda       |
-| GET    | /sales                                                | Listar vendas         |
-| GET    | /sales/report?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD | Relatório por período |
 
 ---
 
