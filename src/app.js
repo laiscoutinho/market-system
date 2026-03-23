@@ -1,30 +1,28 @@
 const express = require('express');
 const cors = require('cors');
-const { apiReference } = require('@scalar/express-api-reference');
 const swaggerUi = require('swagger-ui-express');
-const swaggerSpec = require('./config/swagger');
+const swaggerSpec = require('./config/swagger.config');
+const errorMiddleware = require('./middlewares/error.middleware');
 
-const authRoutes = require('./routes/authRoutes');
-const categoryRoutes = require('./routes/categoryRoutes');
-const productRoutes = require('./routes/productRoutes');
-const saleRoutes = require('./routes/saleRoutes');
+const authRoute = require('./routes/auth.route');
+const categoryRoute = require('./routes/category.route');
+const productRoute = require('./routes/product.route');
+const saleRoute = require('./routes/sale.route');
 
-require('dotenv').config({ quiet: true });
+require('dotenv').config();
 
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 
-app.get('/docs-json', (req, res) => res.json(swaggerSpec));
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-app.use('/auth', authRoutes);
-app.use('/categories', categoryRoutes);
-app.use('/products', productRoutes);
-app.use('/sales', saleRoutes);
+app.use('/auth', authRoute);
+app.use('/categories', categoryRoute);
+app.use('/products', productRoute);
+app.use('/sales', saleRoute);
 
-app.get('/', (req, res) => {
-    res.json({ message: 'O Market System API funcionando!' });
-});
+app.use(errorMiddleware);
 
 module.exports = app;

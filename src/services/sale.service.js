@@ -1,7 +1,7 @@
 const sequelize = require('../config/database.config');
 const saleRepository = require('../repository/sale.repository');
 const productRepository = require('../repository/product.repository');
-const SaleItem = require('../models/sale-item.model');
+const SaleItem = require('../models/saleItem.model');
 const AppError = require('../utils/app.error');
 
 const create = async ({ items, userId }) => {
