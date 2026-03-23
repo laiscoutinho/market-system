@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+const sequelize = require('../config/database.config');
 
 const User = sequelize.define('User', {
     id: {
@@ -22,8 +22,12 @@ const User = sequelize.define('User', {
     },
     role: {
         type: DataTypes.ENUM('ADMIN', 'VENDEDOR'),
-        defaultValue: 'VENDEDOR',
+        allowNull: false,           // faz com que nao chegue Null no banco
+        defaultValue: 'VENDEDOR',   // valor padrão para novos usuários, nao preciso passar no create necessariamente
     },
+}, {
+    tableName: 'users',             // nome que quero no banco
+    modelName: 'User',              // identificador pro Sequelize encontrar esse model
 });
 
 module.exports = User;

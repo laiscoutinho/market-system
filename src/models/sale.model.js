@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
-const User = require('./User');
+const sequelize = require('../config/database.config');
+const User = require('./user.model');
 
 const Sale = sequelize.define('Sale', {
     id: {
@@ -18,9 +18,23 @@ const Sale = sequelize.define('Sale', {
         allowNull: false,
         defaultValue: DataTypes.NOW,
     },
+    userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+}, {
+    tableName: 'sales',
+    modelName: 'Sale',
 });
 
-Sale.belongsTo(User, { foreignKey: 'userId' });
-User.hasMany(Sale, { foreignKey: 'userId' });
+Sale.belongsTo(
+    User, 
+    { foreignKey: 'userId', as: 'user' }
+);
+
+User.hasMany(
+    Sale, 
+    { foreignKey: 'userId', as: 'sales' }
+);
 
 module.exports = Sale;

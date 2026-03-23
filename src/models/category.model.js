@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+const sequelize = require('../config/database.config');
 
 const Category = sequelize.define('Category', {
     id: {
@@ -12,6 +12,9 @@ const Category = sequelize.define('Category', {
         allowNull: false,
         unique: true,
     },
+}, {
+    tableName: 'categories',
+    modelName: 'Category',
 });
 
 module.exports = Category;
