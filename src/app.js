@@ -16,6 +16,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.get('/docs-json', (req, res) => res.json(swaggerSpec));
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use('/auth', authRoute);
