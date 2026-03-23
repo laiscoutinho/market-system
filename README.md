@@ -18,8 +18,10 @@ A aplicação foi construída seguindo arquitetura em camadas, com autenticaçã
 * Express
 * JavaScript
 * MySQL
+* Sequelize (ORM)
 * JWT (JSON Web Token)
 * Swagger (documentação)
+* Zod (validação de dados)
 * Postman (collection de testes)
 
 ---
@@ -30,22 +32,28 @@ O projeto segue o padrão de **arquitetura em camadas**, promovendo organizaçã
 
 ```
 src/
- ├── config/ 
- ├── controllers/
- ├── middlewares/ 
- ├── models/
- ├── routes/
- └── services/
+ ├── config/       → Configurações de banco de dados e Swagger
+ ├── controllers/  → Recebe requisições e retorna respostas
+ ├── docs/         → Documentação Swagger separada por entidade
+ ├── middlewares/  → Autenticação, autorização, validação e erros
+ ├── models/       → Modelagem das entidades no banco
+ ├── repository/   → Isolamento das queries ao banco de dados
+ ├── routes/       → Definição das rotas da API
+ ├── services/     → Regras de negócio
+ ├── utils/        → Utilitários como AppError
+ └── validations/  → Schemas de validação com Zod
 ```
 
 ### 🔎 Responsabilidades
 
-* **routes/** → Define as rotas da API
-* **controllers/** → Recebe requisições e retorna respostas
-* **services/** → Contém as regras de negócio
-* **models/** → Modelagem das entidades no banco
-* **middlewares/** → Autenticação, autorização e validações
-* **config/** → Configurações gerais (banco, JWT etc.)
+* **routes** → define os endpoints e encadeia os middlewares
+* **controllers** → recebe `req`, chama o service e devolve `res`
+* **services** → contém as regras de negócio da aplicação
+* **repository** → única camada que acessa o banco via Sequelize
+* **models** → define as tabelas e associações do MySQL
+* **middlewares** → autenticação JWT, controle de roles, validação de entrada e tratamento de erros
+* **validations** → schemas Zod para validar body e query params
+* **docs** → documentação Swagger organizada por entidade
 
 ---
 
@@ -132,9 +140,15 @@ DB_USER=root
 DB_PASS=sua_senha
 DB_NAME=market_system
 JWT_SECRET=sua_chave_secreta
+JWT_EXPIRES_IN=8h
 ```
 
-### 4️⃣ Executar o projeto
+### 4️⃣ Criar o banco de dados
+```bash
+mysql -u root -p -e "CREATE DATABASE market_system;"
+```
+
+### 5️⃣  Executar o projeto
 
 ```bash
 npm run dev
@@ -162,14 +176,13 @@ Implementada com **Swagger**.
 
 ## 📬 Collection Postman
 
-A collection está disponível no repositório:
-
+A collection está disponível na raiz do repositório:
 ```
-/docs/postman_collection.json
+market-system.postman_collection.json
 ```
 
-Permite testar todas as rotas com autenticação JWT configurada.
+Importar no Postman via **Import → selecionar o arquivo**.
+
+O request de login salva o token automaticamente — todas as rotas autenticadas já funcionam sem configuração manual.
 
 ---
-
-## 📌 Contribua!
