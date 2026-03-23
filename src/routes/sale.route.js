@@ -9,6 +9,6 @@ const router = Router();
 
 router.post('/', authMiddleware, validateMiddleware(createSaleSchema), saleController.create);
 router.get('/', authMiddleware, saleController.findAll);
-router.get('/report', authMiddleware, roleMiddleware('ADMIN'), validateMiddleware(reportSchema), saleController.report);
+router.get('/report', authMiddleware, roleMiddleware('ADMIN'), validateMiddleware(reportSchema, 'query'), saleController.report);
 
 module.exports = router;

@@ -1,9 +1,9 @@
 const { ZodError } = require('zod');
 
-// recebe um schema Zod e valida o req.body antes de chegar no controller
-const validateMiddleware = (schema) => (req, res, next) => {
+// source define de onde validar: 'body' para POST/PUT, 'query' para GET com query params
+const validateMiddleware = (schema, source = 'body') => (req, res, next) => {
     try {
-        schema.parse(req.body);
+        schema.parse(req[source]);
         next();
     } catch (err) {
         if (err instanceof ZodError) {

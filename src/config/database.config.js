@@ -1,6 +1,8 @@
 const { Sequelize } = require('sequelize');
 require('dotenv').config();
 
+const isLocal = !process.env.DB_HOST || process.env.DB_HOST === 'localhost';
+
 const sequelize = new Sequelize(
   process.env.DB_NAME,
   process.env.DB_USER,
@@ -9,9 +11,11 @@ const sequelize = new Sequelize(
     host: process.env.DB_HOST,
     dialect: 'mysql',
     logging: false,
-    dialectOptions: {
-      socketPath: '/var/run/mysqld/mysqld.sock'
-    }
+    ...(isLocal && {
+      dialectOptions: {
+        socketPath: '/var/run/mysqld/mysqld.sock',
+      },
+    }),
   }
 );
 
